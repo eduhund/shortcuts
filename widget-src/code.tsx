@@ -2,6 +2,7 @@
 
 import Key from "./components/Key/Key";
 import Keyboard from "./components/Keyboard/Keyboard";
+import { getKeys } from "./data/keysParams";
 
 const { widget } = figma;
 const { useSyncedState, usePropertyMenu } = widget;
@@ -19,21 +20,6 @@ const MAIN_PROPERTY_CONTROLS: WidgetPropertyMenuItem[] = [
   },
 ];
 
-function mainPropertyController(
-  keysQt: string[],
-  setKeysQt: (arg0: string[]) => void,
-  propertyName: string
-) {
-  const qt = keysQt.length;
-  if (propertyName === "+" && qt < 4) {
-    keysQt.push("command");
-    setKeysQt(keysQt);
-  } else if (propertyName === "-" && qt > 0) {
-    keysQt.pop();
-    setKeysQt(keysQt);
-  }
-}
-
 function Layout() {
   const [modifyKeys, setModifyKeys] = useSyncedState("modifyKeys", ["command"]);
   const [mainKey, setmainKey] = useSyncedState("mainKey", {
@@ -41,13 +27,26 @@ function Layout() {
     value: "Q",
   });
 
+  const allKeys = getKeys();
+
+  function changeModifyKeys({ propertyName }: { propertyName: string }) {
+    const filteredKeys = allKeys.filter((item) => !modifyKeys.includes(item));
+    console.log(filteredKeys);
+    const qt = modifyKeys.length;
+    if (propertyName === "+" && qt < 4) {
+      modifyKeys.push(filteredKeys[0] || "command");
+      setModifyKeys(modifyKeys);
+    } else if (propertyName === "-" && qt > 0) {
+      modifyKeys.pop();
+      setModifyKeys(modifyKeys);
+    }
+  }
+
   function changeLetterKey(value: string) {
     setmainKey({ ...mainKey, value });
   }
 
-  usePropertyMenu(MAIN_PROPERTY_CONTROLS, ({ propertyName }) =>
-    mainPropertyController(modifyKeys, setModifyKeys, propertyName)
-  );
+  usePropertyMenu(MAIN_PROPERTY_CONTROLS, changeModifyKeys);
 
   return (
     <Keyboard>

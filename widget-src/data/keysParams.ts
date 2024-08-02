@@ -40,3 +40,7 @@ export const MODIFY_KEYS: KeysParamsProps = {
     supLineHeight: 12,
   },
 };
+
+export function getKeys() {
+  return Object.keys(MODIFY_KEYS);
+}
