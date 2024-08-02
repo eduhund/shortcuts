@@ -6,15 +6,24 @@ const { AutoLayout, Input, Text } = widget;
 type KeyContainerProps = {
   children: FigmaDeclarativeNode;
   width: number;
+  isSelected?: boolean;
+  onClick: any;
 };
 
 type KeyProps = {
   keyType: string;
   value?: string | null;
+  isSelected?: boolean;
+  onClick: any;
   onChange?: (characters: string) => void;
 };
 
-function KeyContainer({ children, width }: KeyContainerProps) {
+function KeyContainer({
+  children,
+  width,
+  isSelected,
+  onClick,
+}: KeyContainerProps) {
   return (
     <AutoLayout
       width={width}
@@ -26,7 +35,7 @@ function KeyContainer({ children, width }: KeyContainerProps) {
       padding={4}
       cornerRadius={4}
       fill={"#28292D"}
-      stroke={"#121212"}
+      stroke={isSelected ? "#FFFFFF" : "#121212"}
       strokeWidth={0.5}
       strokeAlign={"outside"}
       effect={[
@@ -61,19 +70,26 @@ function KeyContainer({ children, width }: KeyContainerProps) {
           spread: 1,
         },
       ]}
+      onClick={onClick}
     >
       {children}
     </AutoLayout>
   );
 }
 
-export default function Key({ keyType, value = null, onChange }: KeyProps) {
+export default function Key({
+  keyType,
+  value = null,
+  isSelected,
+  onChange,
+  onClick,
+}: KeyProps) {
   const { width = 35, mainLine, additionalLine } = MODIFY_KEYS[keyType] || {};
 
   switch (keyType) {
     case "letter":
       return (
-        <KeyContainer width={width}>
+        <KeyContainer width={width} isSelected={isSelected} onClick={onClick}>
           <Input
             width={"fill-parent"}
             height={"fill-parent"}
@@ -81,12 +97,27 @@ export default function Key({ keyType, value = null, onChange }: KeyProps) {
             fontWeight={400}
             horizontalAlignText={"center"}
             verticalAlignText={"center"}
-            fill={"#F9F9F9"}
+            fill={isSelected ? "#FFFFFF" : "#F9F9F9"}
             value={value}
             inputBehavior={"truncate"}
             textCase={"upper"}
             truncate={true}
-            onClick={(e) => console.log(e)}
+            effect={
+              isSelected
+                ? [
+                    {
+                      type: "drop-shadow",
+                      color: "#FFFFFFCC",
+                      offset: {
+                        x: 0,
+                        y: 0,
+                      },
+                      blur: 0.3,
+                      spread: 0.3,
+                    },
+                  ]
+                : undefined
+            }
             onTextEditEnd={({ characters }) => {
               if (characters.length > 0) onChange && onChange(characters[0]);
             }}
@@ -96,7 +127,7 @@ export default function Key({ keyType, value = null, onChange }: KeyProps) {
       break;
     default:
       return (
-        <KeyContainer width={width}>
+        <KeyContainer width={width} isSelected={isSelected} onClick={onClick}>
           {additionalLine && (
             <Text
               width={"fill-parent"}
@@ -104,7 +135,23 @@ export default function Key({ keyType, value = null, onChange }: KeyProps) {
               lineHeight={additionalLine?.size}
               fontWeight={400}
               horizontalAlignText={additionalLine?.align}
-              fill={"#F9F9F9"}
+              fill={isSelected ? "#FFFFFF" : "#F9F9F9"}
+              effect={
+                isSelected
+                  ? [
+                      {
+                        type: "drop-shadow",
+                        color: "#FFFFFFCC",
+                        offset: {
+                          x: 0,
+                          y: 0,
+                        },
+                        blur: 0.3,
+                        spread: 0.3,
+                      },
+                    ]
+                  : undefined
+              }
             >
               {additionalLine?.value}
             </Text>
@@ -115,7 +162,23 @@ export default function Key({ keyType, value = null, onChange }: KeyProps) {
             lineHeight={mainLine?.size}
             fontWeight={400}
             horizontalAlignText={mainLine?.align}
-            fill={"#F9F9F9"}
+            fill={isSelected ? "#FFFFFF" : "#F9F9F9"}
+            effect={
+              isSelected
+                ? [
+                    {
+                      type: "drop-shadow",
+                      color: "#FFFFFFCC",
+                      offset: {
+                        x: 0,
+                        y: 0,
+                      },
+                      blur: 0.3,
+                      spread: 0.3,
+                    },
+                  ]
+                : undefined
+            }
           >
             {mainLine?.value}
           </Text>
