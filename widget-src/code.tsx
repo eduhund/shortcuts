@@ -1,7 +1,7 @@
 // This is a counter widget with buttons to increment and decrement the number.
 
 const { widget } = figma;
-const { useSyncedState, usePropertyMenu, AutoLayout, Text } = widget;
+const { useSyncedState, usePropertyMenu, AutoLayout, Text, Input } = widget;
 
 const MODIFY_KEYS = {
   command: {
@@ -13,9 +13,55 @@ const MODIFY_KEYS = {
     supLine: "⌘",
     supLineHeight: 12,
   },
+  option: {
+    width: 35,
+    verticalAlign: "end",
+    horizontalAlign: "end",
+    mainLine: "option",
+    mainLineHeight: 8,
+    supLine: "⌥",
+    supLineHeight: 12,
+  },
+  control: {
+    width: 35,
+    verticalAlign: "end",
+    horizontalAlign: "end",
+    mainLine: "control",
+    mainLineHeight: 8,
+    supLine: "⌃",
+    supLineHeight: 12,
+  },
 };
 
-function KeyButton({ keyType }) {
+const MAIN_PROPERTY_CONTROLS: WidgetPropertyMenuItem[] = [
+  {
+    itemType: "action",
+    tooltip: "-",
+    propertyName: "-",
+  },
+  {
+    itemType: "action",
+    tooltip: "+",
+    propertyName: "+",
+  },
+];
+
+function mainPropertyController(
+  keysQt: string[],
+  setKeysQt: (arg0: string[]) => void,
+  propertyName: string
+) {
+  const qt = keysQt.length;
+  if (propertyName === "+" && qt < 5) {
+    keysQt.splice(keysQt.length - 2, 0, "modify");
+    setKeysQt(keysQt);
+  } else if (propertyName === "-" && qt > 1) {
+    keysQt.splice(keysQt.length - 2, 1);
+    setKeysQt(keysQt);
+  }
+}
+
+function KeyButton({ keyType }: { ["keyType"]: string }) {
   switch (keyType) {
     case "modify":
       return <ModifyKey />;
@@ -26,7 +72,7 @@ function KeyButton({ keyType }) {
 }
 
 function ModifyKey() {
-  const [key, setKey] = useSyncedState("keys", "command");
+  const [key, setKey] = useSyncedState("keys", "control");
 
   const {
     width = 35,
@@ -155,15 +201,21 @@ function LetterKey() {
         },
       ]}
     >
-      <Text
+      <Input
         fontSize={14}
         width={14}
         fontWeight={400}
         horizontalAlignText={"center"}
         fill={"#F9F9F9"}
-      >
-        {key}
-      </Text>
+        value={key}
+        inputBehavior={"truncate"}
+        textCase={"upper"}
+        truncate={1}
+        onClick={(e) => console.log(e)}
+        onTextEditEnd={({ characters }) => {
+          if (characters.length > 0) setKey(characters[0]);
+        }}
+      />
     </AutoLayout>
   );
 }
@@ -171,26 +223,8 @@ function LetterKey() {
 function Layout() {
   const [keysQt, setKeysQt] = useSyncedState("keysQt", ["modify", "letter"]);
 
-  usePropertyMenu(
-    [
-      {
-        itemType: "action",
-        tooltip: "-",
-        propertyName: "-",
-      },
-      {
-        itemType: "action",
-        tooltip: "+",
-        propertyName: "+",
-      },
-    ],
-    ({ propertyName }) => {
-      if (propertyName === "+") {
-        setKeysQt(keysQt);
-      } else if (propertyName === "-") {
-        setKeysQt(keysQt);
-      }
-    }
+  usePropertyMenu(MAIN_PROPERTY_CONTROLS, ({ propertyName }) =>
+    mainPropertyController(keysQt, setKeysQt, propertyName)
   );
 
   return (
