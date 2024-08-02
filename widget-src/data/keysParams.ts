@@ -1,43 +1,69 @@
+type LineParamsProps = {
+  value: string;
+  size: number;
+  align: "left" | "right" | "center" | "justified";
+};
+
 export type KeysParamsProps = {
   [key: string]: {
     width?: number;
-    verticalAlign?: WidgetJSX.AlignItems | undefined;
-    horizontalAlign?: string;
-    mainLine?: string;
-    mainLineHeight?: number;
-    supLine?: string;
-    supLineHeight?: number;
+    mainLine: LineParamsProps;
+    additionalLine?: LineParamsProps;
   };
 };
 
 export const MODIFY_KEYS: KeysParamsProps = {
-  letter: {},
   command: {
     width: 46,
-    verticalAlign: "end",
-    horizontalAlign: "end",
-    mainLine: "command",
-    mainLineHeight: 8,
-    supLine: "⌘",
-    supLineHeight: 12,
+    mainLine: {
+      value: "command",
+      size: 8,
+      align: "right",
+    },
+    additionalLine: {
+      value: "⌘",
+      size: 12,
+      align: "right",
+    },
   },
   option: {
     width: 35,
-    verticalAlign: "end",
-    horizontalAlign: "end",
-    mainLine: "option",
-    mainLineHeight: 8,
-    supLine: "⌥",
-    supLineHeight: 12,
+    mainLine: {
+      value: "option",
+      size: 8,
+      align: "right",
+    },
+    additionalLine: {
+      value: "⌥",
+      size: 12,
+      align: "right",
+    },
   },
   control: {
     width: 35,
-    verticalAlign: "end",
-    horizontalAlign: "end",
-    mainLine: "control",
-    mainLineHeight: 8,
-    supLine: "⌃",
-    supLineHeight: 12,
+    mainLine: {
+      value: "control",
+      size: 8,
+      align: "right",
+    },
+    additionalLine: {
+      value: "⌃",
+      size: 12,
+      align: "right",
+    },
+  },
+  shift: {
+    width: 46,
+    mainLine: {
+      value: "⇧",
+      size: 12,
+      align: "left",
+    },
+    additionalLine: {
+      value: "",
+      size: 8,
+      align: "center",
+    },
   },
 };
 

@@ -31,7 +31,6 @@ function Layout() {
 
   function changeModifyKeys({ propertyName }: { propertyName: string }) {
     const filteredKeys = allKeys.filter((item) => !modifyKeys.includes(item));
-    console.log(filteredKeys);
     const qt = modifyKeys.length;
     if (propertyName === "+" && qt < 4) {
       modifyKeys.push(filteredKeys[0] || "command");
