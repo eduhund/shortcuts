@@ -76,14 +76,16 @@ export default function Key({ keyType, value = null, onChange }: KeyProps) {
         <KeyContainer width={width}>
           <Input
             width={"fill-parent"}
+            height={"fill-parent"}
             fontSize={14}
             fontWeight={400}
             horizontalAlignText={"center"}
+            verticalAlignText={"center"}
             fill={"#F9F9F9"}
             value={value}
             inputBehavior={"truncate"}
             textCase={"upper"}
-            truncate={1}
+            truncate={true}
             onClick={(e) => console.log(e)}
             onTextEditEnd={({ characters }) => {
               if (characters.length > 0) onChange && onChange(characters[0]);
