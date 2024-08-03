@@ -2,7 +2,7 @@
 
 import Key from "./components/Key/Key";
 import Keyboard from "./components/Keyboard/Keyboard";
-import { getKeys } from "./data/keysParams";
+import { getKeys, getKeysOptions } from "./data/keysParams";
 
 const { widget } = figma;
 const { useSyncedState, usePropertyMenu, useStickable } = widget;
@@ -35,20 +35,19 @@ function Layout() {
     "isKeySelected",
     null
   );
-  const modifyKeyVariants = [
-    { option: "command", label: "Command" },
-    { option: "option", label: "Option" },
-    { option: "control", label: "Control" },
-  ];
+  const modifyKeyVariants = getKeysOptions("modify");
 
-  const mainKeyVariants = [{ option: "letter", label: "Letter" }];
+  const mainKeyVariants = getKeysOptions(
+    modifyKeys.length === 0 ? "all" : "main"
+  );
 
   useStickable();
 
-  const allKeys = getKeys();
-
   function changeModifyKeys({ propertyName }: WidgetPropertyEvent) {
-    const filteredKeys = allKeys.filter((item) => !modifyKeys.includes(item));
+    const modifyKeysNames = getKeys("modify");
+    const filteredKeys = modifyKeysNames.filter(
+      (item) => !modifyKeys.includes(item)
+    );
     const qt = modifyKeys.length;
     if (propertyName === "+" && qt < 4) {
       modifyKeys.push(filteredKeys[0] || "command");
@@ -126,7 +125,7 @@ function Layout() {
             setIsKeySelected(null);
           } else if (propertyValue !== mainKey.keyType) {
             setMainKey({
-              keyType: propertyName,
+              keyType: propertyValue,
               value: mainKey.keyType === "letter" ? "Q" : null,
             });
           }

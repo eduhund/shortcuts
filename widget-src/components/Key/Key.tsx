@@ -1,4 +1,4 @@
-import { MODIFY_KEYS } from "../../data/keysParams";
+import { getKey } from "../../data/keysParams";
 
 const { widget } = figma;
 const { AutoLayout, Input, Text } = widget;
@@ -20,56 +20,71 @@ type KeyProps = {
 
 function KeyContainer({
   children,
-  width,
+  width = 38,
   isSelected,
   onClick,
 }: KeyContainerProps) {
+  const keyEffects: any = [
+    {
+      type: "drop-shadow",
+      color: isSelected ? "#FFFFFF99" : "#00000099",
+      offset: {
+        x: 0,
+        y: 0,
+      },
+      blur: 0.1,
+      spread: 0.1,
+    },
+    {
+      type: "inner-shadow",
+      color: "#00000016",
+      offset: {
+        x: 0,
+        y: 16,
+      },
+      blur: 8,
+      spread: 4,
+    },
+    {
+      type: "inner-shadow",
+      color: isSelected ? "#FFFFFF66" : "#9D9D9D25",
+      offset: {
+        x: 0,
+        y: 0,
+      },
+      blur: isSelected ? 0.5 : 1,
+      spread: isSelected ? 0.5 : 1,
+    },
+  ];
+
+  if (isSelected) {
+    keyEffects.push({
+      type: "inner-shadow",
+      color: "#FFFFFF66",
+      offset: {
+        x: 0,
+        y: 0,
+      },
+      blur: 0.5,
+      spread: 0.5,
+    });
+  }
+
   return (
     <AutoLayout
       width={width}
-      height={35}
+      height={38}
       verticalAlignItems={"center"}
       horizontalAlignItems={"center"}
       direction={"vertical"}
       spacing={"auto"}
-      padding={4}
+      padding={5}
       cornerRadius={4}
       fill={"#28292D"}
       stroke={isSelected ? "#FFFFFF" : "#121212"}
       strokeWidth={0.5}
       strokeAlign={"outside"}
-      effect={[
-        {
-          type: "drop-shadow",
-          color: "#00000016",
-          offset: {
-            x: 0,
-            y: 0,
-          },
-          blur: 0.2,
-          spread: 0.2,
-        },
-        {
-          type: "inner-shadow",
-          color: "#00000016",
-          offset: {
-            x: 0,
-            y: 16,
-          },
-          blur: 8,
-          spread: 4,
-        },
-        {
-          type: "inner-shadow",
-          color: "#9D9D9D25",
-          offset: {
-            x: 0,
-            y: 0,
-          },
-          blur: 1,
-          spread: 1,
-        },
-      ]}
+      effect={keyEffects}
       onClick={onClick}
     >
       {children}
@@ -84,7 +99,7 @@ export default function Key({
   onChange,
   onClick,
 }: KeyProps) {
-  const { width = 35, mainLine, additionalLine } = MODIFY_KEYS[keyType] || {};
+  const { width = 38, mainLine, additionalLine } = getKey(keyType);
 
   switch (keyType) {
     case "letter":
@@ -92,7 +107,7 @@ export default function Key({
         <KeyContainer width={width} isSelected={isSelected} onClick={onClick}>
           <Input
             width={"fill-parent"}
-            height={"fill-parent"}
+            height={"hug-contents"}
             fontSize={14}
             fontWeight={400}
             horizontalAlignText={"center"}
@@ -113,7 +128,6 @@ export default function Key({
                         y: 0,
                       },
                       blur: 0.3,
-                      spread: 0.3,
                     },
                   ]
                 : undefined
@@ -131,9 +145,11 @@ export default function Key({
           {additionalLine && (
             <Text
               width={"fill-parent"}
+              height={"hug-contents"}
               fontSize={additionalLine?.size}
               lineHeight={additionalLine?.size}
               fontWeight={400}
+              letterSpacing={-0.25}
               horizontalAlignText={additionalLine?.align}
               fill={isSelected ? "#FFFFFF" : "#F9F9F9"}
               effect={
@@ -147,7 +163,6 @@ export default function Key({
                           y: 0,
                         },
                         blur: 0.3,
-                        spread: 0.3,
                       },
                     ]
                   : undefined
@@ -158,6 +173,7 @@ export default function Key({
           )}
           <Text
             width={"fill-parent"}
+            height={"hug-contents"}
             fontSize={mainLine?.size}
             lineHeight={mainLine?.size}
             fontWeight={400}
@@ -174,7 +190,6 @@ export default function Key({
                         y: 0,
                       },
                       blur: 0.3,
-                      spread: 0.3,
                     },
                   ]
                 : undefined

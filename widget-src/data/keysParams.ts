@@ -6,15 +6,106 @@ type LineParamsProps = {
 
 export type KeysParamsProps = {
   [key: string]: {
+    name: string;
     width?: number;
-    mainLine: LineParamsProps;
+    vAlign?: WidgetJSX.AlignItems;
+    mainLine?: LineParamsProps;
     additionalLine?: LineParamsProps;
   };
 };
 
-export const MODIFY_KEYS: KeysParamsProps = {
+export const KEYS: KeysParamsProps & object = {
+  letter: {
+    name: "Letter",
+  },
+  number: {
+    name: "Number",
+  },
+  space: {
+    name: "Space",
+    width: 80,
+    mainLine: {
+      value: "space",
+      size: 8,
+      align: "center",
+    },
+  },
+  enter: {
+    name: "Enter",
+    width: 48,
+    mainLine: {
+      value: "⏎",
+      size: 12,
+      align: "left",
+    },
+    additionalLine: {
+      value: "",
+      size: 8,
+      align: "center",
+    },
+  },
+  backspace: {
+    name: "Backspace",
+    width: 48,
+    mainLine: {
+      value: "⌫",
+      size: 12,
+      align: "right",
+    },
+    additionalLine: {
+      value: "",
+      size: 8,
+      align: "center",
+    },
+  },
+  escape: {
+    name: "Escape",
+    mainLine: {
+      value: "esc",
+      size: 8,
+      align: "left",
+    },
+    additionalLine: {
+      value: "",
+      size: 8,
+      align: "center",
+    },
+  },
+  arrowUp: {
+    name: "Arrow Up",
+    mainLine: {
+      value: "↑",
+      size: 12,
+      align: "center",
+    },
+  },
+  arrowDown: {
+    name: "Arrow Down",
+    mainLine: {
+      value: "↓",
+      size: 12,
+      align: "center",
+    },
+  },
+  arrowLeft: {
+    name: "Arrow Left",
+    mainLine: {
+      value: "←",
+      size: 12,
+      align: "center",
+    },
+  },
+  arrowRight: {
+    name: "Arrow Right",
+    mainLine: {
+      value: "→",
+      size: 12,
+      align: "center",
+    },
+  },
   command: {
-    width: 46,
+    name: "Command",
+    width: 48,
     mainLine: {
       value: "command",
       size: 8,
@@ -27,7 +118,7 @@ export const MODIFY_KEYS: KeysParamsProps = {
     },
   },
   option: {
-    width: 35,
+    name: "Option",
     mainLine: {
       value: "option",
       size: 8,
@@ -40,7 +131,7 @@ export const MODIFY_KEYS: KeysParamsProps = {
     },
   },
   control: {
-    width: 35,
+    name: "Control",
     mainLine: {
       value: "control",
       size: 8,
@@ -53,7 +144,8 @@ export const MODIFY_KEYS: KeysParamsProps = {
     },
   },
   shift: {
-    width: 46,
+    name: "Shift",
+    width: 48,
     mainLine: {
       value: "⇧",
       size: 12,
@@ -65,8 +157,94 @@ export const MODIFY_KEYS: KeysParamsProps = {
       align: "center",
     },
   },
+  capsLock: {
+    name: "Caps Lock",
+    width: 48,
+    mainLine: {
+      value: "⇪",
+      size: 12,
+      align: "left",
+    },
+    additionalLine: {
+      value: "•",
+      size: 8,
+      align: "left",
+    },
+  },
+  tab: {
+    name: "Tab",
+    width: 48,
+    mainLine: {
+      value: "⇥",
+      size: 12,
+      align: "left",
+    },
+    additionalLine: {
+      value: "",
+      size: 8,
+      align: "left",
+    },
+  },
+  fn: {
+    name: "Fn",
+    mainLine: {
+      value: "🌐",
+      size: 12,
+      align: "left",
+    },
+    additionalLine: {
+      value: "fn",
+      size: 8,
+      align: "right",
+    },
+  },
 };
 
-export function getKeys() {
-  return Object.keys(MODIFY_KEYS);
+const mainKeysList = [
+  "letter",
+  "number",
+  "space",
+  "enter",
+  "backspace",
+  "escape",
+  "arrowUp",
+  "arrowDown",
+  "arrowLeft",
+  "arrowRight",
+];
+
+const modifyKeysList = [
+  "command",
+  "option",
+  "control",
+  "shift",
+  "capsLock",
+  "tab",
+  "fn",
+];
+
+export function getKeys(type: "modify" | "main" | "all" = "all") {
+  switch (type) {
+    case "modify":
+      return modifyKeysList;
+    case "main":
+      return mainKeysList;
+    case "all":
+    default:
+      return Object.keys(KEYS);
+  }
+}
+
+export function getKey(key: string) {
+  return KEYS[key] || {};
+}
+
+export function getKeysOptions(type: "modify" | "main" | "all" = "all") {
+  const keys = getKeys(type);
+  return keys.map((key) => {
+    return {
+      option: key,
+      label: KEYS[key]?.name || "Unknown",
+    };
+  });
 }

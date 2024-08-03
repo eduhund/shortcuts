@@ -11,9 +11,9 @@ export default function Keyboard({ children }: KeyboardProps) {
       width={"hug-contents"}
       height={"hug-contents"}
       verticalAlignItems={"center"}
-      spacing={4}
-      padding={4}
-      cornerRadius={8}
+      spacing={5}
+      padding={5}
+      cornerRadius={9}
       fill={"#C1C2C4"}
       effect={[
         {
