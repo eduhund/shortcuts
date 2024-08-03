@@ -5,7 +5,7 @@ import Keyboard from "./components/Keyboard/Keyboard";
 import { getKeys, getKeysOptions } from "./data/keysParams";
 
 const { widget } = figma;
-const { useSyncedState, usePropertyMenu, useStickable } = widget;
+const { useEffect, useSyncedState, usePropertyMenu, useStickable } = widget;
 
 type mainKeyProps = {
   keyType: string;
@@ -46,7 +46,7 @@ function Layout() {
     modifyKeys.length === 0 ? "all" : "main"
   );
 
-  useStickable();
+  //useStickable();
 
   function changeModifyKeys({ propertyName }: WidgetPropertyEvent) {
     const modifyKeysNames = getKeys("modify");
@@ -82,7 +82,9 @@ function Layout() {
   }
 
   function changeLetterKey(value: string) {
-    setMainKey({ ...mainKey, value });
+    useEffect(() => {
+      setMainKey({ ...mainKey, value });
+    });
   }
 
   switch (isKeySelected) {
@@ -136,7 +138,7 @@ function Layout() {
           } else if (propertyValue !== mainKey.keyType) {
             setMainKey({
               keyType: propertyValue,
-              value: mainKey.keyType === "letter" ? "Q" : null,
+              value: propertyValue === "letter" ? "Q" : null,
             });
           }
         }
@@ -145,6 +147,8 @@ function Layout() {
     default:
       usePropertyMenu(MAIN_PROPERTY_CONTROLS, changeModifyKeys);
   }
+
+  console.log(mainKey, modifyKeys, isKeySelected);
 
   return (
     <Keyboard>
