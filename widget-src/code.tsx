@@ -46,7 +46,7 @@ function Layout() {
     modifyKeys.length === 0 ? "all" : "main"
   );
 
-  //useStickable();
+  useStickable();
 
   function changeModifyKeys({ propertyName }: WidgetPropertyEvent) {
     const modifyKeysNames = getKeys("modify");

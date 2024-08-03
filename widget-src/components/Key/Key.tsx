@@ -7,14 +7,14 @@ type KeyContainerProps = {
   children: FigmaDeclarativeNode;
   width: number;
   isSelected?: boolean;
-  onClick: any;
+  onClick: (event: WidgetClickEvent) => void;
 };
 
 type KeyProps = {
   keyType: string;
   value?: string | null;
   isSelected?: boolean;
-  onClick: any;
+  onClick: (event: WidgetClickEvent) => void;
   onChange?: (characters: string) => void;
 };
 
@@ -24,7 +24,7 @@ function KeyContainer({
   isSelected,
   onClick,
 }: KeyContainerProps) {
-  const keyEffects: any = [
+  const keyEffects: WidgetJSX.Effect[] = [
     {
       type: "drop-shadow",
       color: isSelected ? "#FFFFFF99" : "#00000099",
