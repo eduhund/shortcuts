@@ -5,7 +5,7 @@ import Keyboard from "./components/Keyboard/Keyboard";
 import { getKeys, getKeysOptions } from "./data/keysParams";
 
 const { widget } = figma;
-const { useEffect, useSyncedState, usePropertyMenu, useStickable } = widget;
+const { useSyncedState, usePropertyMenu, useStickable } = widget;
 
 type mainKeyProps = {
   keyType: string;
@@ -82,9 +82,7 @@ function Layout() {
   }
 
   function changeLetterKey(value: string) {
-    useEffect(() => {
-      setMainKey({ ...mainKey, value });
-    });
+    setMainKey({ ...mainKey, value });
   }
 
   switch (isKeySelected) {
@@ -148,8 +146,6 @@ function Layout() {
       usePropertyMenu(MAIN_PROPERTY_CONTROLS, changeModifyKeys);
   }
 
-  console.log(mainKey, modifyKeys, isKeySelected);
-
   return (
     <Keyboard>
       {modifyKeys.map((key, i) => (
@@ -157,7 +153,7 @@ function Layout() {
           key={key}
           keyType={key}
           isSelected={isKeySelected === i}
-          onClick={() => setIsKeySelected(isKeySelected != i ? i : null)}
+          onClick={() => isKeySelected != i && setIsKeySelected(i)}
         ></Key>
       ))}
       <Key
@@ -165,7 +161,7 @@ function Layout() {
         keyType={mainKey.keyType}
         value={mainKey.value}
         isSelected={isKeySelected === 9}
-        onClick={() => setIsKeySelected(isKeySelected != 9 ? 9 : null)}
+        onClick={() => isKeySelected != 9 && setIsKeySelected(9)}
         onChange={changeLetterKey}
       />
     </Keyboard>

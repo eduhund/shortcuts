@@ -138,7 +138,6 @@ export default function Key({
           />
         </KeyContainer>
       );
-      break;
     default:
       return (
         <KeyContainer width={width} isSelected={isSelected} onClick={onClick}>
