@@ -7,6 +7,11 @@ import { getKeys } from "./data/keysParams";
 const { widget } = figma;
 const { useSyncedState, usePropertyMenu, useStickable } = widget;
 
+type mainKeyProps = {
+  keyType: string;
+  value: string | null;
+};
+
 const MAIN_PROPERTY_CONTROLS: WidgetPropertyMenuItem[] = [
   {
     itemType: "action",
@@ -22,7 +27,7 @@ const MAIN_PROPERTY_CONTROLS: WidgetPropertyMenuItem[] = [
 
 function Layout() {
   const [modifyKeys, setModifyKeys] = useSyncedState("modifyKeys", ["command"]);
-  const [mainKey, setmainKey] = useSyncedState("mainKey", {
+  const [mainKey, setMainKey] = useSyncedState<mainKeyProps>("mainKey", {
     keyType: "letter",
     value: "Q",
   });
@@ -58,13 +63,17 @@ function Layout() {
     propertyName,
     propertyValue = "command",
   }: WidgetPropertyEvent) {
-    const modifyKeyIndex = Number(propertyName.split("_")[1]);
-    modifyKeys[modifyKeyIndex] = propertyValue;
-    setModifyKeys(modifyKeys);
+    if (propertyName === "back") {
+      setIsKeySelected(null);
+    } else {
+      const modifyKeyIndex = Number(propertyName.split("_")[1]);
+      modifyKeys[modifyKeyIndex] = propertyValue;
+      setModifyKeys(modifyKeys);
+    }
   }
 
   function changeLetterKey(value: string) {
-    setmainKey({ ...mainKey, value });
+    setMainKey({ ...mainKey, value });
   }
 
   switch (isKeySelected) {
@@ -74,6 +83,14 @@ function Layout() {
     case 3:
       usePropertyMenu(
         [
+          {
+            itemType: "action",
+            tooltip: "←",
+            propertyName: "back",
+          },
+          {
+            itemType: "separator",
+          },
           {
             itemType: "dropdown",
             propertyName: "modifyKey_" + isKeySelected,
@@ -89,6 +106,14 @@ function Layout() {
       usePropertyMenu(
         [
           {
+            itemType: "action",
+            tooltip: "←",
+            propertyName: "back",
+          },
+          {
+            itemType: "separator",
+          },
+          {
             itemType: "dropdown",
             propertyName: "mainKey",
             tooltip: "Main key change",
@@ -96,7 +121,16 @@ function Layout() {
             options: mainKeyVariants,
           },
         ],
-        (e) => console.log(e)
+        ({ propertyName, propertyValue = "letter" }: WidgetPropertyEvent) => {
+          if (propertyName === "back") {
+            setIsKeySelected(null);
+          } else if (propertyValue !== mainKey.keyType) {
+            setMainKey({
+              keyType: propertyName,
+              value: mainKey.keyType === "letter" ? "Q" : null,
+            });
+          }
+        }
       );
       break;
     default:
