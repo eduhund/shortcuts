@@ -25,12 +25,17 @@ const MAIN_PROPERTY_CONTROLS: WidgetPropertyMenuItem[] = [
   },
 ];
 
+const defaultMainKey = {
+  keyType: "letter",
+  value: "Q",
+};
+
 function Layout() {
   const [modifyKeys, setModifyKeys] = useSyncedState("modifyKeys", ["command"]);
-  const [mainKey, setMainKey] = useSyncedState<mainKeyProps>("mainKey", {
-    keyType: "letter",
-    value: "Q",
-  });
+  const [mainKey, setMainKey] = useSyncedState<mainKeyProps>(
+    "mainKey",
+    defaultMainKey
+  );
   const [isKeySelected, setIsKeySelected] = useSyncedState<number | null>(
     "isKeySelected",
     null
@@ -49,6 +54,11 @@ function Layout() {
       (item) => !modifyKeys.includes(item)
     );
     const qt = modifyKeys.length;
+
+    if (modifyKeysNames.includes(mainKey.keyType)) {
+      setMainKey(defaultMainKey);
+    }
+
     if (propertyName === "+" && qt < 4) {
       modifyKeys.push(filteredKeys[0] || "command");
       setModifyKeys(modifyKeys);
