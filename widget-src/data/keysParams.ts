@@ -15,11 +15,8 @@ export type KeysParamsProps = {
 };
 
 export const KEYS: KeysParamsProps & object = {
-  letter: {
-    name: "Letter",
-  },
-  number: {
-    name: "Number",
+  default: {
+    name: "Default",
   },
   space: {
     name: "Space",
@@ -201,8 +198,7 @@ export const KEYS: KeysParamsProps & object = {
 };
 
 const mainKeysList = [
-  "letter",
-  "number",
+  "default",
   "space",
   "enter",
   "backspace",
@@ -242,6 +238,8 @@ const NUMBERS_SYMBOLS = new Map([
   ["9", "("],
   ["0", ")"],
 ]);
+
+export const numberKeys = [...NUMBERS_SYMBOLS.keys()];
 
 export function getKeys(type: "modify" | "main" | "all" = "all") {
   switch (type) {

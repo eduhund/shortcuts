@@ -1,4 +1,4 @@
-import { getKey, getSecondLetter } from "../../data/keysParams";
+import { getKey, getSecondLetter, numberKeys } from "../../data/keysParams";
 
 const { widget } = figma;
 const { AutoLayout, Input, Text } = widget;
@@ -104,19 +104,51 @@ export default function Key({
   const secondLetter = value && getSecondLetter(value);
 
   switch (keyType) {
-    case "letter":
-      return (
-        <KeyContainer width={width} isSelected={isSelected} onClick={onClick}>
-          {secondLetter && (
-            <Text
+    case "default":
+      if (numberKeys.includes(value || "")) {
+        return (
+          <KeyContainer width={width} isSelected={isSelected} onClick={onClick}>
+            {secondLetter && (
+              <Text
+                width={"fill-parent"}
+                height={"hug-contents"}
+                fontSize={9}
+                lineHeight={9}
+                fontWeight={400}
+                letterSpacing={-0.25}
+                horizontalAlignText={"center"}
+                fill={isSelected ? "#FFFFFF" : "#F9F9F9"}
+                effect={
+                  isSelected
+                    ? [
+                        {
+                          type: "drop-shadow",
+                          color: "#FFFFFFCC",
+                          offset: {
+                            x: 0,
+                            y: 0,
+                          },
+                          blur: 0.3,
+                        },
+                      ]
+                    : undefined
+                }
+              >
+                {secondLetter}
+              </Text>
+            )}
+            <Input
               width={"fill-parent"}
               height={"hug-contents"}
-              fontSize={11.5}
-              lineHeight={11.5}
+              fontSize={14}
               fontWeight={400}
-              letterSpacing={-0.25}
               horizontalAlignText={"center"}
+              verticalAlignText={"center"}
               fill={isSelected ? "#FFFFFF" : "#F9F9F9"}
+              value={value}
+              inputBehavior={"truncate"}
+              textCase={"upper"}
+              truncate={true}
               effect={
                 isSelected
                   ? [
@@ -132,56 +164,56 @@ export default function Key({
                     ]
                   : undefined
               }
-            >
-              {secondLetter}
-            </Text>
-          )}
-          <Input
-            width={"fill-parent"}
-            height={"hug-contents"}
-            fontSize={secondLetter ? 11.5 : 14}
-            fontWeight={400}
-            horizontalAlignText={"center"}
-            verticalAlignText={"center"}
-            fill={isSelected ? "#FFFFFF" : "#F9F9F9"}
-            value={value}
-            inputBehavior={"truncate"}
-            textCase={"upper"}
-            truncate={true}
-            effect={
-              isSelected
-                ? [
-                    {
-                      type: "drop-shadow",
-                      color: "#FFFFFFCC",
-                      offset: {
-                        x: 0,
-                        y: 0,
-                      },
-                      blur: 0.3,
-                    },
-                  ]
-                : undefined
-            }
-            onTextEditEnd={({ characters }) => {
-              if (characters.length > 0) onChange && onChange(characters[0]);
-            }}
-          />
-        </KeyContainer>
-      );
-    case "number":
-      return (
-        <KeyContainer width={width} isSelected={isSelected} onClick={onClick}>
-          {secondLetter && (
-            <Text
+              onTextEditEnd={({ characters }) => {
+                if (characters.length > 0) onChange && onChange(characters[0]);
+              }}
+            />
+          </KeyContainer>
+        );
+      } else {
+        return (
+          <KeyContainer width={width} isSelected={isSelected} onClick={onClick}>
+            {secondLetter && (
+              <Text
+                width={"fill-parent"}
+                height={"hug-contents"}
+                fontSize={11.5}
+                lineHeight={11.5}
+                fontWeight={400}
+                letterSpacing={-0.25}
+                horizontalAlignText={"center"}
+                fill={isSelected ? "#FFFFFF" : "#F9F9F9"}
+                effect={
+                  isSelected
+                    ? [
+                        {
+                          type: "drop-shadow",
+                          color: "#FFFFFFCC",
+                          offset: {
+                            x: 0,
+                            y: 0,
+                          },
+                          blur: 0.3,
+                        },
+                      ]
+                    : undefined
+                }
+              >
+                {secondLetter}
+              </Text>
+            )}
+            <Input
               width={"fill-parent"}
               height={"hug-contents"}
-              fontSize={9}
-              lineHeight={9}
+              fontSize={secondLetter ? 11.5 : 14}
               fontWeight={400}
-              letterSpacing={-0.25}
               horizontalAlignText={"center"}
+              verticalAlignText={"center"}
               fill={isSelected ? "#FFFFFF" : "#F9F9F9"}
+              value={value}
+              inputBehavior={"truncate"}
+              textCase={"upper"}
+              truncate={true}
               effect={
                 isSelected
                   ? [
@@ -197,43 +229,13 @@ export default function Key({
                     ]
                   : undefined
               }
-            >
-              {secondLetter}
-            </Text>
-          )}
-          <Input
-            width={"fill-parent"}
-            height={"hug-contents"}
-            fontSize={14}
-            fontWeight={400}
-            horizontalAlignText={"center"}
-            verticalAlignText={"center"}
-            fill={isSelected ? "#FFFFFF" : "#F9F9F9"}
-            value={value}
-            inputBehavior={"truncate"}
-            textCase={"upper"}
-            truncate={true}
-            effect={
-              isSelected
-                ? [
-                    {
-                      type: "drop-shadow",
-                      color: "#FFFFFFCC",
-                      offset: {
-                        x: 0,
-                        y: 0,
-                      },
-                      blur: 0.3,
-                    },
-                  ]
-                : undefined
-            }
-            onTextEditEnd={({ characters }) => {
-              if (characters.length > 0) onChange && onChange(characters[0]);
-            }}
-          />
-        </KeyContainer>
-      );
+              onTextEditEnd={({ characters }) => {
+                if (characters.length > 0) onChange && onChange(characters[0]);
+              }}
+            />
+          </KeyContainer>
+        );
+      }
     default:
       return (
         <KeyContainer width={width} isSelected={isSelected} onClick={onClick}>
