@@ -26,7 +26,7 @@ const MAIN_PROPERTY_CONTROLS: WidgetPropertyMenuItem[] = [
 ];
 
 const defaultMainKey = {
-  keyType: "letter",
+  keyType: "default",
   value: "Q",
 };
 
@@ -134,13 +134,13 @@ function Layout() {
             options: mainKeyVariants,
           },
         ],
-        ({ propertyName, propertyValue = "letter" }: WidgetPropertyEvent) => {
+        ({ propertyName, propertyValue = "default" }: WidgetPropertyEvent) => {
           if (propertyName === "back") {
             setIsKeySelected(null);
           } else if (propertyValue !== mainKey.keyType) {
             setMainKey({
               keyType: propertyValue,
-              value: propertyValue === "letter" ? "Q" : null,
+              value: propertyValue === "default" ? "Q" : null,
             });
           }
         }
