@@ -1,6 +1,6 @@
 {
   "name": "shortcuts",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Create user-frendly shortcut annotations for your design",
   "scripts": {
     "build": "esbuild widget-src/code.tsx --bundle --outfile=dist/code.js --target=es6",

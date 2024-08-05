@@ -72,6 +72,7 @@ function KeyContainer({
 
   return (
     <AutoLayout
+      name="Key"
       width={width}
       height={38}
       verticalAlignItems={"center"}

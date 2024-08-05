@@ -9,6 +9,7 @@ export default function Keyboard({ children }: KeyboardProps) {
   const widgetId = useWidgetId();
   return (
     <AutoLayout
+      name="Keyboard"
       width={"hug-contents"}
       height={"hug-contents"}
       verticalAlignItems={"center"}
