@@ -1,7 +1,7 @@
 {
-  "name": "Shortcuts",
-  "version": "1.0.0",
-  "description": "Your Figma widget",
+  "name": "shortcuts",
+  "version": "0.2.0",
+  "description": "Create user-frendly shortcut annotations for your design",
   "scripts": {
     "build": "esbuild widget-src/code.tsx --bundle --outfile=dist/code.js --target=es6",
     "lint": "eslint --ext .ts,.tsx --ignore-pattern node_modules .",
@@ -9,8 +9,8 @@
     "tsc": "tsc --noEmit -p widget-src",
     "watch": "npm run build -- --watch"
   },
-  "author": "",
-  "license": "",
+  "author": "Roman Nebel",
+  "license": "MIT",
   "devDependencies": {
     "@figma/eslint-plugin-figma-plugins": "*",
     "@figma/plugin-typings": "*",
