@@ -216,6 +216,33 @@ const mainKeysList = [
 
 const modifyKeysList = ["command", "option", "control", "shift", "fn"];
 
+const TWO_LETTERS_KEYS = new Map([
+  [",", "<"],
+  [".", ">"],
+  [";", ":"],
+  ["'", '"'],
+  ["\\", "|"],
+  ["[", "{"],
+  ["]", "}"],
+  ["`", "~"],
+  ["§", "±"],
+  ["-", "—"],
+  ["=", "+"],
+]);
+
+const NUMBERS_SYMBOLS = new Map([
+  ["1", "!"],
+  ["2", "@"],
+  ["3", "#"],
+  ["4", "$"],
+  ["5", "%"],
+  ["6", "^"],
+  ["7", "&"],
+  ["8", "*"],
+  ["9", "("],
+  ["0", ")"],
+]);
+
 export function getKeys(type: "modify" | "main" | "all" = "all") {
   switch (type) {
     case "modify":
@@ -240,4 +267,8 @@ export function getKeysOptions(type: "modify" | "main" | "all" = "all") {
       label: KEYS[key]?.name || "Unknown",
     };
   });
+}
+
+export function getSecondLetter(letter: string) {
+  return TWO_LETTERS_KEYS.get(letter) || NUMBERS_SYMBOLS.get(letter) || null;
 }
