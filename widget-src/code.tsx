@@ -105,7 +105,11 @@ function Layout() {
             propertyName: "modifyKey_" + isKeySelected,
             tooltip: "Modify key change",
             selectedOption: modifyKeys[isKeySelected],
-            options: modifyKeyVariants,
+            options: modifyKeyVariants.filter(
+              ({ option }) =>
+                option === modifyKeys[isKeySelected] ||
+                !modifyKeys.includes(option)
+            ),
           },
         ],
         changeModifyKey
