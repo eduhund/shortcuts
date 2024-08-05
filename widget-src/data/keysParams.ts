@@ -58,6 +58,20 @@ export const KEYS: KeysParamsProps & object = {
       align: "center",
     },
   },
+  tab: {
+    name: "Tab",
+    width: 48,
+    mainLine: {
+      value: "⇥",
+      size: 12,
+      align: "left",
+    },
+    additionalLine: {
+      value: "",
+      size: 8,
+      align: "left",
+    },
+  },
   escape: {
     name: "Escape",
     mainLine: {
@@ -171,20 +185,6 @@ export const KEYS: KeysParamsProps & object = {
       align: "left",
     },
   },
-  tab: {
-    name: "Tab",
-    width: 48,
-    mainLine: {
-      value: "⇥",
-      size: 12,
-      align: "left",
-    },
-    additionalLine: {
-      value: "",
-      size: 8,
-      align: "left",
-    },
-  },
   fn: {
     name: "Fn",
     mainLine: {
@@ -206,6 +206,7 @@ const mainKeysList = [
   "space",
   "enter",
   "backspace",
+  "tab",
   "escape",
   "arrowUp",
   "arrowDown",
@@ -213,15 +214,7 @@ const mainKeysList = [
   "arrowRight",
 ];
 
-const modifyKeysList = [
-  "command",
-  "option",
-  "control",
-  "shift",
-  "capsLock",
-  "tab",
-  "fn",
-];
+const modifyKeysList = ["command", "option", "control", "shift", "fn"];
 
 export function getKeys(type: "modify" | "main" | "all" = "all") {
   switch (type) {
