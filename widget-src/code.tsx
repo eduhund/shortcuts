@@ -5,7 +5,7 @@ import Keyboard from "./components/Keyboard/Keyboard";
 import { getKeys, getKeysOptions } from "./data/keysParams";
 
 const { widget } = figma;
-const { useSyncedState, usePropertyMenu, useStickable } = widget;
+const { useSyncedState, usePropertyMenu, useStickable, useWidgetId } = widget;
 
 type mainKeyProps = {
   keyType: string;
@@ -47,6 +47,26 @@ function Layout() {
   );
 
   useStickable();
+
+  const { addClickHandler, removeClickHandler } = (() => {
+    const widgetId = useWidgetId();
+    let listen = true;
+
+    async function addClickHandler() {
+      if (listen) {
+        const widgetNode = (await figma.getNodeByIdAsync(
+          widgetId
+        )) as WidgetNode;
+        figma.currentPage.selection = [widgetNode];
+      }
+    }
+
+    function removeClickHandler() {
+      listen = false;
+    }
+
+    return { addClickHandler, removeClickHandler };
+  })();
 
   function changeModifyKeys({ propertyName }: WidgetPropertyEvent) {
     const modifyKeysNames = getKeys("modify");
@@ -151,7 +171,7 @@ function Layout() {
   }
 
   return (
-    <Keyboard>
+    <Keyboard onClick={addClickHandler}>
       {modifyKeys.map((key, i) => (
         <Key
           key={key}
@@ -166,6 +186,7 @@ function Layout() {
         value={mainKey.value}
         isSelected={isKeySelected === 9}
         onClick={() => isKeySelected != 9 && setIsKeySelected(9)}
+        onInputClick={removeClickHandler}
         onChange={changeLetterKey}
       />
     </Keyboard>

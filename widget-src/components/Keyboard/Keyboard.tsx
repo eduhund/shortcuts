@@ -1,12 +1,12 @@
 const { widget } = figma;
-const { AutoLayout, useWidgetId } = widget;
+const { AutoLayout } = widget;
 
 type KeyboardProps = {
   children: FigmaDeclarativeNode;
+  onClick: () => void;
 };
 
-export default function Keyboard({ children }: KeyboardProps) {
-  const widgetId = useWidgetId();
+export default function Keyboard({ children, onClick }: KeyboardProps) {
   return (
     <AutoLayout
       name="Keyboard"
@@ -17,12 +17,7 @@ export default function Keyboard({ children }: KeyboardProps) {
       padding={5}
       cornerRadius={9}
       fill={"#C1C2C4"}
-      onClick={async () => {
-        const widgetNode = (await figma.getNodeByIdAsync(
-          widgetId
-        )) as WidgetNode;
-        figma.currentPage.selection = [widgetNode];
-      }}
+      onClick={onClick}
       effect={[
         {
           type: "drop-shadow",

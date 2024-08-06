@@ -16,6 +16,7 @@ type KeyProps = {
   isSelected?: boolean;
   onClick: (event: WidgetClickEvent) => void;
   onChange?: (characters: string) => void;
+  onInputClick?: () => void;
 };
 
 function KeyContainer({
@@ -99,6 +100,7 @@ export default function Key({
   isSelected,
   onChange,
   onClick,
+  onInputClick,
 }: KeyProps) {
   const { width = 38, mainLine, additionalLine } = getKey(keyType);
 
@@ -150,6 +152,7 @@ export default function Key({
               inputBehavior={"truncate"}
               textCase={"upper"}
               truncate={true}
+              onClick={onInputClick}
               effect={
                 isSelected
                   ? [
@@ -215,6 +218,7 @@ export default function Key({
               inputBehavior={"truncate"}
               textCase={"upper"}
               truncate={true}
+              onClick={onInputClick}
               effect={
                 isSelected
                   ? [
