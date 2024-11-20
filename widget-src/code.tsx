@@ -223,7 +223,7 @@ function Layout() {
     <Keyboard onClick={isLimitReached ? () => {} : addClickHandler}>
       {modifyKeys.map((key, i) => (
         <Key
-          key={i}
+          key={key}
           keyType={key}
           isSelected={isKeySelected === i}
           onClick={
@@ -234,7 +234,6 @@ function Layout() {
         ></Key>
       ))}
       <Key
-        key={9}
         keyType={mainKey.keyType}
         value={mainKey.value}
         isSelected={isKeySelected === 9}
