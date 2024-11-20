@@ -14,6 +14,7 @@ type KeyProps = {
   keyType: string;
   value?: string | null;
   isSelected?: boolean;
+  disabled?: boolean;
   onClick: (event: WidgetClickEvent) => void;
   onChange?: (characters: string) => void;
   onInputClick?: () => void;
@@ -98,6 +99,7 @@ export default function Key({
   keyType,
   value = null,
   isSelected,
+  disabled,
   onChange,
   onClick,
   onInputClick,
@@ -218,7 +220,7 @@ export default function Key({
               inputBehavior={"truncate"}
               textCase={"upper"}
               truncate={true}
-              onClick={onInputClick}
+              onClick={disabled ? () => {} : onInputClick}
               effect={
                 isSelected
                   ? [
