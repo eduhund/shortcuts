@@ -5,13 +5,7 @@ import Keyboard from "./components/Keyboard/Keyboard";
 import { getKeys, getKeysOptions } from "./data/keysParams";
 
 const { widget } = figma;
-const {
-  useSyncedState,
-  usePropertyMenu,
-  useStickable,
-  useEffect,
-  useWidgetId,
-} = widget;
+const { useSyncedState, usePropertyMenu, useStickable, useWidgetId } = widget;
 
 type mainKeyProps = {
   keyType: string;
@@ -46,23 +40,6 @@ function Layout() {
     "isKeySelected",
     null
   );
-  const [isLimitReached, setIsLimitReached] = useSyncedState<boolean>(
-    "isLimitReached",
-    false
-  );
-
-  useEffect(() => {
-    const allWidgets = figma.currentPage.findWidgetNodesByWidgetId(
-      figma.widgetId || ""
-    );
-
-    if (!isLimitReached && allWidgets.length >= 25) {
-      setIsLimitReached(true);
-      allWidgets.forEach((widget) => {
-        widget.setWidgetSyncedState({ isLimitReached: true });
-      });
-    }
-  });
 
   const modifyKeyVariants = getKeysOptions("modify");
 
@@ -129,120 +106,86 @@ function Layout() {
     setMainKey({ ...mainKey, value });
   }
 
-  if (isLimitReached) {
-    usePropertyMenu(
-      [
-        {
-          itemType: "action",
-          tooltip: "You reached the limit of 25 widgets per page.",
-          propertyName: "back",
-        },
-        {
-          itemType: "separator",
-        },
-        {
-          itemType: "link",
-          tooltip: "Get more Shortcuts",
-          propertyName: "goToSite",
-          href: "https://eduhund.gumroad.com/l/shortcuts",
-        },
-      ],
-      () => {}
-    );
-  } else {
-    switch (isKeySelected) {
-      case 0:
-      case 1:
-      case 2:
-      case 3:
-        usePropertyMenu(
-          [
-            {
-              itemType: "action",
-              tooltip: "←",
-              propertyName: "back",
-            },
-            {
-              itemType: "separator",
-            },
-            {
-              itemType: "dropdown",
-              propertyName: "modifyKey_" + isKeySelected,
-              tooltip: "Modify key change",
-              selectedOption: modifyKeys[isKeySelected],
-              options: modifyKeyVariants.filter(
-                ({ option }) =>
-                  option === modifyKeys[isKeySelected] ||
-                  !modifyKeys.includes(option)
-              ),
-            },
-          ],
-          changeModifyKey
-        );
-        break;
-      case 9:
-        usePropertyMenu(
-          [
-            {
-              itemType: "action",
-              tooltip: "←",
-              propertyName: "back",
-            },
-            {
-              itemType: "separator",
-            },
-            {
-              itemType: "dropdown",
-              propertyName: "mainKey",
-              tooltip: "Main key change",
-              selectedOption: mainKey.keyType,
-              options: mainKeyVariants,
-            },
-          ],
-          ({
-            propertyName,
-            propertyValue = "default",
-          }: WidgetPropertyEvent) => {
-            if (propertyName === "back") {
-              setIsKeySelected(null);
-            } else if (propertyValue !== mainKey.keyType) {
-              setMainKey({
-                keyType: propertyValue,
-                value: propertyValue === "default" ? "Q" : null,
-              });
-            }
+  switch (isKeySelected) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+      usePropertyMenu(
+        [
+          {
+            itemType: "action",
+            tooltip: "←",
+            propertyName: "back",
+          },
+          {
+            itemType: "separator",
+          },
+          {
+            itemType: "dropdown",
+            propertyName: "modifyKey_" + isKeySelected,
+            tooltip: "Modify key change",
+            selectedOption: modifyKeys[isKeySelected],
+            options: modifyKeyVariants.filter(
+              ({ option }) =>
+                option === modifyKeys[isKeySelected] ||
+                !modifyKeys.includes(option)
+            ),
+          },
+        ],
+        changeModifyKey
+      );
+      break;
+    case 9:
+      usePropertyMenu(
+        [
+          {
+            itemType: "action",
+            tooltip: "←",
+            propertyName: "back",
+          },
+          {
+            itemType: "separator",
+          },
+          {
+            itemType: "dropdown",
+            propertyName: "mainKey",
+            tooltip: "Main key change",
+            selectedOption: mainKey.keyType,
+            options: mainKeyVariants,
+          },
+        ],
+        ({ propertyName, propertyValue = "default" }: WidgetPropertyEvent) => {
+          if (propertyName === "back") {
+            setIsKeySelected(null);
+          } else if (propertyValue !== mainKey.keyType) {
+            setMainKey({
+              keyType: propertyValue,
+              value: propertyValue === "default" ? "Q" : null,
+            });
           }
-        );
-        break;
-      default:
-        usePropertyMenu(MAIN_PROPERTY_CONTROLS, changeModifyKeys);
-    }
+        }
+      );
+      break;
+    default:
+      usePropertyMenu(MAIN_PROPERTY_CONTROLS, changeModifyKeys);
   }
 
   return (
-    <Keyboard onClick={isLimitReached ? () => {} : addClickHandler}>
+    <Keyboard onClick={addClickHandler}>
       {modifyKeys.map((key, i) => (
         <Key
           key={key}
           keyType={key}
           isSelected={isKeySelected === i}
-          onClick={
-            isLimitReached
-              ? () => {}
-              : () => isKeySelected != i && setIsKeySelected(i)
-          }
+          onClick={() => isKeySelected != i && setIsKeySelected(i)}
         ></Key>
       ))}
       <Key
         keyType={mainKey.keyType}
         value={mainKey.value}
         isSelected={isKeySelected === 9}
-        disabled={isLimitReached}
-        onClick={
-          isLimitReached
-            ? () => {}
-            : () => isKeySelected != 9 && setIsKeySelected(9)
-        }
+        onClick={() => isKeySelected != 9 && setIsKeySelected(9)}
         onInputClick={removeClickHandler}
         onChange={changeLetterKey}
       />
